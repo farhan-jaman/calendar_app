@@ -1,4 +1,4 @@
-import 'package:calendar_app/utils/data_provider.dart';
+import 'package:calendar_app/providers/data_provider.dart';
 import 'package:calendar_app/widgets/event_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

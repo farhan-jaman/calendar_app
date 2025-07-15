@@ -1,5 +1,5 @@
 import 'package:calendar_app/pages/home_page.dart';
-import 'package:calendar_app/utils/data_provider.dart';
+import 'package:calendar_app/providers/data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 void main() {
