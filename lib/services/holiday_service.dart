@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HolidayService {
   static const String _calendarId = 'en.bd%23holiday@group.v.calendar.google.com';
-  static const String _apiKey = 'AIzaSyDt7EOELaESa4E2UcuVHSW5DF3AatD3U10';
+  static const String _apiKey = 'MY_API_KEY';
 
   static Future<Map<DateTime, List<Event>>> loadHolidays(int year) async {
     final prefs = await SharedPreferences.getInstance();
