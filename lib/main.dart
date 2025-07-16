@@ -1,11 +1,12 @@
 import 'package:calendar_app/pages/home_page.dart';
-import 'package:calendar_app/providers/data_provider.dart';
+import 'package:calendar_app/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     ChangeNotifierProvider(
-      create: (context) => DataProvider(),
+      create: (context) => EventProvider(),
       child: MyApp(),
     )
   );
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: Colors.lightBlue
+        colorSchemeSeed: Colors.teal
       ),
       home: HomePage(),
     );

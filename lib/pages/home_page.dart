@@ -1,7 +1,9 @@
 import 'package:calendar_app/pages/calendar_page.dart';
+import 'package:calendar_app/providers/event_provider.dart';
 import 'package:calendar_app/widgets/dialogs/edit_event_dialog.dart';
 import 'package:calendar_app/pages/events_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,6 +27,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      final provider = context.read<EventProvider>();
+      provider.changeFocusedDay(DateTime.now());
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _pages[_selectedIndex],
@@ -35,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         destinations: [
           NavigationDestination(
             icon: Icon(Icons.bookmark_rounded),
-            label: 'Events',
+            label: 'Tasks',
           ),
           NavigationDestination(
             icon: Icon(Icons.calendar_month_rounded),

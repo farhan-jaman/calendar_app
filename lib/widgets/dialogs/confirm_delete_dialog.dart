@@ -1,10 +1,11 @@
-import 'package:calendar_app/providers/data_provider.dart';
+import 'package:calendar_app/models/event.dart';
+import 'package:calendar_app/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ConfirmDeleteDialog extends StatelessWidget {
-  final int index;
-  const ConfirmDeleteDialog({super.key, required this.index});
+  final Event event;
+  const ConfirmDeleteDialog({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            context.read<DataProvider>().deleteEvent(index);
+            context.read<EventProvider>().deleteEvent(event);
             Navigator.pop(context);
           },
           child: Text('Delete'),

@@ -1,4 +1,4 @@
-import 'package:calendar_app/providers/data_provider.dart';
+import 'package:calendar_app/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +14,7 @@ class EditEvent extends StatelessWidget {
         padding: EdgeInsets.all(8.0),
         child: TextField(
           controller: controller,
+          autofocus: true,
         ),
       ),
       actions: [
@@ -26,7 +27,7 @@ class EditEvent extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            context.read<DataProvider>().addEvent(controller.text);
+            context.read<EventProvider>().addEvent(controller.text);
             Navigator.pop(context);
           },
           child: Text('Submit'),
