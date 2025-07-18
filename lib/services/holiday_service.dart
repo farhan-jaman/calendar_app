@@ -42,7 +42,10 @@ class HolidayService {
       final dateStr = item['start']['date'];
       final summary = item['summary'];
       final date = (DateTime.parse(dateStr));
-      holidays.putIfAbsent(date, () => []).add(Event(title: summary));
+      holidays.putIfAbsent(date, () => []).add(Event(
+        title: summary,
+        isHoliday: true,
+      ));
     }
 
     return holidays;
