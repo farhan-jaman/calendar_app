@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EventTab extends StatelessWidget {
-  const EventTab({super.key});
+  final DateTime selectedDay;
+  const EventTab({
+    super.key,
+    required this.selectedDay,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final dayEvents = context.watch<EventProvider>().dayEvents;
+    final dayEvents = context.watch<EventProvider>().getTodayList(DateTime(selectedDay.year, selectedDay.month, selectedDay.day));
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),

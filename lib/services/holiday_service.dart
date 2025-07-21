@@ -7,7 +7,7 @@ class HolidayService {
   static const String _calendarId = 'en.bd%23holiday@group.v.calendar.google.com';
   static const String _apiKey = 'MY_API_KEY';
 
-  static Future<Map<DateTime, List<Event>>> loadHolidays(int year) async {
+  static Future<List<Event>> loadHolidays(int year) async {
     final prefs = await SharedPreferences.getInstance();
     final cacheKey = 'cached_holidays_$year';
 
@@ -34,17 +34,21 @@ class HolidayService {
     }
   }
 
-  static Map<DateTime, List<Event>> _parseHolidayJson(Map<String, dynamic> json) {
+  static List<Event> _parseHolidayJson(Map<String, dynamic> json) {
     final items = json['items'] as List;
-    final Map<DateTime, List<Event>> holidays = {};
+    final List<Event> holidays = [];
 
     for (var item in items) {
-      final dateStr = item['start']['date'];
+      final startDateStr = item['start']['date'];
+      final endDateStr = item['end']['date'];
       final summary = item['summary'];
-      final date = (DateTime.parse(dateStr));
-      holidays.putIfAbsent(date, () => []).add(Event(
+      final startDate = (DateTime.parse(startDateStr));
+      final endDate = (DateTime.parse(endDateStr));
+      holidays.add(Event(
         title: summary,
         isHoliday: true,
+        startTime: startDate,
+        endTime: endDate,
       ));
     }
 

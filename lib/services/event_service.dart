@@ -3,30 +3,20 @@ import 'package:calendar_app/models/event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EventService {
-  Future<void> saveEventMap(Map<DateTime, List<Event>> eventMap) async {
+  Future<void> saveEventList(List<Event> eventList) async {
     final prefs = await SharedPreferences.getInstance();
 
-    final jsonMap = {
-      for (var entry in eventMap.entries)
-        entry.key.toIso8601String(): entry.value.map((e) => e.toJson()).toList()
-    };
+    final List<String> jsonList = eventList.map((e) => jsonEncode(e.toJson())).toList();
 
-    await prefs.setString('event_map', jsonEncode(jsonMap));
+    await prefs.setStringList('event_list', jsonList);
   }
 
-  Future<Map<DateTime, List<Event>>> loadEventMap() async {
+  Future<List<Event>> loadEventList() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonString = prefs.getString('event_map');
+    final jsonStringList = prefs.getStringList('event_list');
 
-    if (jsonString == null) return {};
+    if (jsonStringList == null) return [];
 
-    final Map<String, dynamic> decoded = jsonDecode(jsonString);
-
-    return {
-      for (var entry in decoded.entries)
-        DateTime.parse(entry.key): (entry.value as List)
-        .map((e) => Event.fromJson(e))
-        .toList()
-    };
+    return jsonStringList.map((e) => Event.fromJson(jsonDecode(e))).toList();
   }
 }

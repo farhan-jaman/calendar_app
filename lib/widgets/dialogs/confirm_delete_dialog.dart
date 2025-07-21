@@ -5,7 +5,12 @@ import 'package:provider/provider.dart';
 
 class ConfirmDeleteDialog extends StatelessWidget {
   final Event event;
-  const ConfirmDeleteDialog({super.key, required this.event});
+  final int index;
+  const ConfirmDeleteDialog({
+    super.key,
+    required this.event,
+    required this.index,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,7 @@ class ConfirmDeleteDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            context.read<EventProvider>().deleteEvent(event);
+            context.read<EventProvider>().removeEvent(event, index);
             Navigator.pop(context);
           },
           child: Text('Delete'),

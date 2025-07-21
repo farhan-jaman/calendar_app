@@ -1,10 +1,7 @@
 import 'package:calendar_app/models/event.dart';
-import 'package:calendar_app/providers/event_provider.dart';
+import 'package:calendar_app/pages/edit_event_page.dart';
 import 'package:calendar_app/widgets/dialogs/confirm_delete_dialog.dart';
-import 'package:calendar_app/widgets/dialogs/edit_event_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class EventTile extends StatelessWidget {
 
@@ -21,12 +18,21 @@ class EventTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final startHour = dayEvents[index].startTime.hour.toString().padLeft(2, '0');
+    final startMin = dayEvents[index].startTime.minute.toString().padLeft(2, '0');
+
+    final endHour = dayEvents[index].endTime.hour.toString().padLeft(2, '0');
+    final endMin = dayEvents[index].endTime.minute.toString().padLeft(2, '0');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: ListTile(
         title: Text(dayEvents[index].title),
         subtitle: Text(
-          DateFormat('MMMM d, y').format(context.watch<EventProvider>().selectedDay)
+          dayEvents[index].isAllDay
+          ?
+            'All day'
+          :
+            '$startHour:$startMin - $endHour:$endMin',
         ),
         trailing: (!dayEvents[index].isHoliday)
         ?
@@ -35,14 +41,14 @@ class EventTile extends StatelessWidget {
               PopupMenuItem(
                 onTap: () => showDialog(
                   context: context,
-                  builder: (context) => EditEvent(event: dayEvents[index], index: index),
+                  builder: (context) => EditEventPage(event: dayEvents[index], index: index),
                 ),
                 child: Text('Edit'),
               ),
               PopupMenuItem(
                 onTap: () => showDialog(
                   context: context,
-                  builder: (context) => ConfirmDeleteDialog(event: dayEvents[index]),
+                  builder: (context) => ConfirmDeleteDialog(event: dayEvents[index], index: index,),
                 ),
                 child: Text('Delete'),
               ),

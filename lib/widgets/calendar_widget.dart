@@ -1,3 +1,5 @@
+import 'package:calendar_app/models/event.dart';
+import 'package:calendar_app/providers/calendar_provider.dart';
 import 'package:calendar_app/providers/event_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +14,7 @@ class CalendarWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       color: Colors.white,
       child: TableCalendar(
-        focusedDay: context.watch<EventProvider>().focusedDay,
+        focusedDay: context.watch<CalendarProvider>().focusedDay,
         firstDay: DateTime(DateTime.now().year - 100),
         lastDay: DateTime(DateTime.now().year + 100),
         startingDayOfWeek: StartingDayOfWeek.sunday,
@@ -20,16 +22,16 @@ class CalendarWidget extends StatelessWidget {
         daysOfWeekStyle: DaysOfWeekStyle(
           weekendStyle: TextStyle(color: Colors.red),
         ),
-        selectedDayPredicate: (day) => isSameDay(day, context.watch<EventProvider>().selectedDay),
+        selectedDayPredicate: (day) => isSameDay(day, context.watch<CalendarProvider>().selectedDay),
         onDaySelected: (selectedDay, focusedDay) {
-          context.read<EventProvider>().changeFocusedDay(focusedDay);
-          context.read<EventProvider>().changeSelectedDay(selectedDay);
+          context.read<CalendarProvider>().changeFocusedDay(focusedDay);
+          context.read<CalendarProvider>().changeSelectedDay(selectedDay);
         },
-        onPageChanged: (focusedDay) => context.read<EventProvider>().changeFocusedDay(focusedDay),
+        onPageChanged: (focusedDay) => context.read<CalendarProvider>().changeFocusedDay(focusedDay),
         calendarBuilders: CalendarBuilders(
           markerBuilder: (context, day, events) {
-            final holidays = context.watch<EventProvider>().holidays;
-            final isHoliday = holidays.containsKey(DateTime(day.year, day.month, day.day));
+            final holidays = context.watch<EventProvider>().holidayList;
+            final isHoliday = holidays.firstWhere((e) => day.isAfter(e.startTime) && day.isBefore(e.endTime), orElse: () => Event(title: '', startTime: DateTime(0), endTime: DateTime(0), isHoliday: false)).isHoliday;
 
             if (isHoliday) {
               return Align(

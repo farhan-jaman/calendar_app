@@ -1,6 +1,7 @@
 import 'package:calendar_app/pages/calendar_page.dart';
-import 'package:calendar_app/providers/event_provider.dart';
-import 'package:calendar_app/widgets/dialogs/edit_event_dialog.dart';
+import 'package:calendar_app/pages/edit_event_page.dart';
+import 'package:calendar_app/providers/data_provider.dart';
+import 'package:calendar_app/widgets/dialogs/add_task_dialog.dart';
 import 'package:calendar_app/pages/events_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,15 +24,6 @@ class _HomePageState extends State<HomePage> {
   void _onDestinationSelected(int index) {
     setState(() {
       _selectedIndex = index;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      final provider = context.read<EventProvider>();
-      provider.changeFocusedDay(DateTime.now());
     });
   }
 
@@ -60,7 +52,11 @@ class _HomePageState extends State<HomePage> {
           showDialog(
             context: context,
             builder: (context) {
-              return EditEvent();
+              switch (context.read<DataProvider>().tabIndex) {
+                case 0: return EditEventPage();
+                case 1: return AddTaskDialog();
+                default: return EditEventPage();
+              }
             },
           );
         },
