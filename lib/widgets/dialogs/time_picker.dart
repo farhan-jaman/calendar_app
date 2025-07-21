@@ -16,7 +16,7 @@ class TimePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    DateTime _time = time;
+    DateTime dateTime = time;
 
     return Container(
       height: 220,
@@ -40,9 +40,9 @@ class TimePicker extends StatelessWidget {
           SizedBox(height: 24),
           Expanded(
             child: CupertinoDatePicker(
-              initialDateTime: _time,
+              initialDateTime: dateTime,
               onDateTimeChanged: (value) {
-                _time = value;
+                dateTime = value;
               },
             ),
           ),
@@ -56,7 +56,7 @@ class TimePicker extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  onValueSelected(_time);
+                  onValueSelected(dateTime);
                   Navigator.pop(context);
                 },
                 child: Text('Submit'),

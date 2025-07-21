@@ -82,19 +82,25 @@ class _EditEventPageState extends State<EditEventPage> {
               onPressed: () {
                 _isEditing
                 ?
-                  context.read<EventProvider>().editEvent(widget.index!, Event(
-                    title: _titleController.text,
-                    isAllDay: _allDay,
-                    startTime: _startTime,
-                    endTime: _endTime,
-                  ))
+                  context.read<EventProvider>().editEvent(
+                    widget.index!,
+                    Event(
+                      title: _titleController.text,
+                      isAllDay: _allDay,
+                      startTime: _startTime,
+                      endTime: _endTime,
+                    ),
+                    widget.event!,
+                  )
                 :
-                  context.read<EventProvider>().addEvent(Event(
-                    title: _titleController.text,
-                    isAllDay: _allDay,
-                    startTime: _startTime,
-                    endTime: _endTime,
-                  ));
+                  context.read<EventProvider>().addEvent(
+                    Event(
+                      title: _titleController.text,
+                      isAllDay: _allDay,
+                      startTime: _startTime,
+                      endTime: _endTime,
+                    ),
+                  );
                 Navigator.pop(context);
               },
               icon: Icon(Icons.check_rounded),

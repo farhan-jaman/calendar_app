@@ -23,6 +23,9 @@ class CalendarWidget extends StatelessWidget {
           weekendStyle: TextStyle(color: Colors.red),
         ),
         selectedDayPredicate: (day) => isSameDay(day, context.watch<CalendarProvider>().selectedDay),
+        onCalendarCreated: (_) {
+          context.read<EventProvider>().loadEvents(context.read<CalendarProvider>().focusedDay.year);
+        },
         onDaySelected: (selectedDay, focusedDay) {
           context.read<CalendarProvider>().changeFocusedDay(focusedDay);
           context.read<CalendarProvider>().changeSelectedDay(selectedDay);

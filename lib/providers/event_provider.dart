@@ -12,18 +12,13 @@ class EventProvider extends ChangeNotifier {
   List<Event> get eventList => _eventList;
   List<Event> get holidayList => _holidayList;
 
-  EventProvider() {
-    loadEvents();
-  }
-
-  Future loadEvents() async {
+  Future loadEvents(int year) async {
     _eventList = await _eventService.loadEventList();
-    _holidayList = await HolidayService.loadHolidays(DateTime.now().year);
+    _holidayList = await HolidayService.loadHolidays(year);
     notifyListeners();
   }
 
   List<Event> getTodayList(DateTime selectedDay) {
-    loadEvents();
     final todayEventList = _eventList.where((element) => isInDay(selectedDay, element.startTime, element.endTime));
     final todayHolidayList = _holidayList.where((element) => isInDay(selectedDay, element.startTime, element.endTime));
 
@@ -36,14 +31,14 @@ class EventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void editEvent(int index, Event newEvent) {
-    _eventList[index] = newEvent;
+  void editEvent(int index, Event newEvent, Event oldEvent) {
+    _eventList[_eventList.indexOf(oldEvent)] = newEvent;
     _eventService.saveEventList(_eventList);
     notifyListeners();
   }
 
   void removeEvent(Event event, int index) {
-    _eventList.removeAt(index);
+    _eventList.remove(event);
     _eventService.saveEventList(_eventList);
     notifyListeners();
   }
