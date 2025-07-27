@@ -14,14 +14,11 @@ class CalendarWidget extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       color: Colors.white,
       child: TableCalendar(
+        rowHeight: MediaQuery.of(context).size.height / 12,
         focusedDay: context.watch<CalendarProvider>().focusedDay,
         firstDay: DateTime(DateTime.now().year - 100),
         lastDay: DateTime(DateTime.now().year + 100),
         startingDayOfWeek: StartingDayOfWeek.sunday,
-        weekendDays: [DateTime.friday, DateTime.saturday],
-        daysOfWeekStyle: DaysOfWeekStyle(
-          weekendStyle: TextStyle(color: Colors.red),
-        ),
         selectedDayPredicate: (day) => isSameDay(day, context.watch<CalendarProvider>().selectedDay),
         onCalendarCreated: (_) {
           context.read<EventProvider>().loadEvents(context.read<CalendarProvider>().focusedDay.year);
@@ -35,11 +32,19 @@ class CalendarWidget extends StatelessWidget {
           markerBuilder: (context, day, events) {
             final holidays = context.watch<EventProvider>().holidayList;
             final isHoliday = holidays.firstWhere((e) => day.isAfter(e.startTime) && day.isBefore(e.endTime), orElse: () => Event(title: '', startTime: DateTime(0), endTime: DateTime(0), isHoliday: false)).isHoliday;
+            final hasEvent = context.watch<EventProvider>().hasEvent(day);
 
             if (isHoliday) {
               return Align(
                 alignment: Alignment.topRight,
-                child: Icon(Icons.flag_rounded, size: 14, color: Colors.teal,),
+                child: Icon(Icons.flag_rounded, size: 12, color: Colors.teal,),
+              );
+            }
+
+            if (hasEvent) {
+              return Align(
+                alignment: Alignment.topLeft,
+                child: Icon(Icons.event, size: 12, color: Colors.teal),
               );
             }
             return null;
@@ -58,7 +63,6 @@ class CalendarWidget extends StatelessWidget {
           ),
           todayTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
           selectedTextStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-          weekendTextStyle: TextStyle(color: Colors.red)
         ),
       ),
     );

@@ -25,6 +25,12 @@ class EventProvider extends ChangeNotifier {
     return [...todayHolidayList, ...todayEventList];
   }
 
+  bool hasEvent(DateTime selectedDay) {
+    final todayEventList = _eventList.where((element) => isInDay(selectedDay, element.startTime, element.endTime));
+
+    return todayEventList.isNotEmpty;
+  }
+
   void addEvent(Event newEvent) {
     _eventList.add(newEvent);
     _eventService.saveEventList(_eventList);

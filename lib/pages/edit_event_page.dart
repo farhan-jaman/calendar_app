@@ -165,7 +165,11 @@ class _EditEventPageState extends State<EditEventPage> {
                 children: [
                   Text('From'),
                   Text(
-                    '${DateFormat('E, dd MMM yyyy HH:mm').format(_startTime)}    >',
+                    _allDay
+                    ?
+                      'All day'
+                    :
+                      '${DateFormat('E, dd MMM yyyy HH:mm').format(_startTime)}    >',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
@@ -203,7 +207,11 @@ class _EditEventPageState extends State<EditEventPage> {
                 children: [
                   Text('To'),
                   Text(
-                    '${DateFormat('E, dd MMM yyyy HH:mm').format(_endTime)}    >',
+                    _allDay
+                    ?
+                      'All day'
+                    :
+                      '${DateFormat('E, dd MMM yyyy HH:mm').format(_endTime)}    >',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey,

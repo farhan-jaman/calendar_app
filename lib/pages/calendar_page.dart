@@ -46,6 +46,7 @@ class _CalendarPageState extends State<CalendarPage> with TickerProviderStateMix
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.teal.withAlpha(180),
           title: GestureDetector(
             onTap: () => _datePicker(context),
             child: Text(DateFormat('MMMM y').format(context.watch<CalendarProvider>().focusedDay)),
