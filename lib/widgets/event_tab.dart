@@ -23,8 +23,13 @@ class EventTab extends StatelessWidget {
         )
       :
         ListView.builder(
-          itemCount: dayEvents.length,
-          itemBuilder: (context, index) => EventTile(context: context, index: index, dayEvents: dayEvents),
+          itemCount: dayEvents.length + 1,
+          itemBuilder: (context, index) {
+            if (index == dayEvents.length) {
+              return SizedBox(height: 24);
+            }
+            return EventTile(context: context, index: index, dayEvents: dayEvents);
+          }
         ),
     );
   }

@@ -35,9 +35,9 @@ class TaskTab extends StatelessWidget {
             SizedBox(height: 12),
             Expanded(
               child: ListView.builder(
-                itemCount: value.taskList.length,
+                itemCount: value.taskList.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == value.taskList.length) return SizedBox(height: 55);
+                  if (index == value.taskList.length) return SizedBox(height: 24);
                   return TaskTile(index: index, task: value.taskList[index]);
                 }
               ),
