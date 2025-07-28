@@ -37,13 +37,13 @@ class EventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void editEvent(int index, Event newEvent, Event oldEvent) {
+  void editEvent(Event newEvent, Event oldEvent) {
     _eventList[_eventList.indexOf(oldEvent)] = newEvent;
     _eventService.saveEventList(_eventList);
     notifyListeners();
   }
 
-  void removeEvent(Event event, int index) {
+  void removeEvent(Event event) {
     _eventList.remove(event);
     _eventService.saveEventList(_eventList);
     notifyListeners();

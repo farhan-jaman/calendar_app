@@ -1,21 +1,26 @@
 import 'package:calendar_app/models/event.dart';
 import 'package:calendar_app/providers/event_provider.dart';
+import 'package:calendar_app/providers/task_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ConfirmDeleteDialog extends StatelessWidget {
-  final Event event;
-  final int index;
+  final Event? event;
   const ConfirmDeleteDialog({
     super.key,
-    required this.event,
-    required this.index,
+    this.event,
   });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Delete?'),
+      title: Text(
+        event != null
+        ?
+          'Delete?'
+        :
+          'Delete all Tasks?'
+      ),
       actions: [
         TextButton(
           onPressed: () {
@@ -25,7 +30,11 @@ class ConfirmDeleteDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            context.read<EventProvider>().removeEvent(event, index);
+            event != null
+            ?
+              context.read<EventProvider>().removeEvent(event!)
+            :
+              context.read<TaskProvider>().deleteAllTasks();
             Navigator.pop(context);
           },
           child: Text('Delete'),

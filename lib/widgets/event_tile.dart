@@ -48,7 +48,7 @@ class EventTile extends StatelessWidget {
               PopupMenuItem(
                 onTap: () => showDialog(
                   context: context,
-                  builder: (context) => ConfirmDeleteDialog(event: dayEvents[index], index: index,),
+                  builder: (context) => ConfirmDeleteDialog(event: dayEvents[index]),
                 ),
                 child: Text('Delete'),
               ),

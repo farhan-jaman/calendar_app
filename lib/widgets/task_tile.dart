@@ -17,10 +17,18 @@ class TaskTile extends StatelessWidget {
     return ListTile(
       leading: IconButton(
         onPressed: () {
-          context.read<TaskProvider>().editTask(index, Task(title: task.title, isComplete: !task.isComplete));
+          context.read<TaskProvider>().updateTask(
+            task,
+            task.copyWith(isComplete: !task.isComplete)
+          );
         },
         icon: Icon(
-          task.isComplete ? Icons.check_box_outlined : Icons.check_box_outline_blank_rounded
+          task.isComplete
+            ? Icons.check_box_outlined
+            : Icons.check_box_outline_blank_rounded,
+          color: task.isComplete
+            ? Colors.grey
+            : Colors.black,
         ),
       ),
       title: Text(

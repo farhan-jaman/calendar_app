@@ -16,6 +16,10 @@ class AddTaskDialog extends StatelessWidget {
         controller: controller,
         autofocus: true,
         maxLength: 100,
+        onSubmitted: (value) {
+          context.read<TaskProvider>().addTask(Task(title: value, day: DateTime.now()));
+          Navigator.pop(context);
+        },
       ),
       actions: [
         TextButton(
@@ -27,7 +31,10 @@ class AddTaskDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            context.read<TaskProvider>().addTask(Task(title: controller.text));
+            context.read<TaskProvider>().addTask(Task(
+              title: controller.text,
+              day: DateTime.now(),
+            ));
             controller.dispose();
             Navigator.pop(context);
           },

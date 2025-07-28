@@ -83,7 +83,6 @@ class _EditEventPageState extends State<EditEventPage> {
                 _isEditing
                 ?
                   context.read<EventProvider>().editEvent(
-                    widget.index!,
                     Event(
                       title: _titleController.text,
                       isAllDay: _allDay,

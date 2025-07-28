@@ -1,4 +1,6 @@
+import 'package:calendar_app/pages/task_page.dart';
 import 'package:calendar_app/providers/task_provider.dart';
+import 'package:calendar_app/widgets/dialogs/confirm_delete_dialog.dart';
 import 'package:calendar_app/widgets/task_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +11,7 @@ class TaskTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<TaskProvider>(
-      builder: (context, value, child) => Container(
+      builder: (context, provider, child) => Container(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,9 +27,28 @@ class TaskTab extends StatelessWidget {
                       fontWeight: FontWeight.bold
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.edit_rounded),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => ConfirmDeleteDialog(),
+                          );
+                        },
+                        icon: Icon(Icons.delete),
+                      ),
+                      SizedBox(width: 12),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => TaskPage())
+                          );
+                        },
+                        icon: Icon(Icons.edit_rounded),
+                      ),
+                    ],
                   )
                 ],
               ),
@@ -35,10 +56,44 @@ class TaskTab extends StatelessWidget {
             SizedBox(height: 12),
             Expanded(
               child: ListView.builder(
-                itemCount: value.taskList.length + 1,
+                itemCount: provider.taskList.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == value.taskList.length) return SizedBox(height: 24);
-                  return TaskTile(index: index, task: value.taskList[index]);
+                  if (index == provider.taskList.length) {
+                    return SizedBox(height: 24);
+                  } else {
+                    if (index == provider.incompleteTasks.length) {
+                      return Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Completed  ',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.grey,
+                                  thickness: 2,
+                                ),
+                              ),
+                            ],
+                          ),
+                          TaskTile(
+                            index: index,
+                            task: provider.completedTasks[index - provider.incompleteTasks.length],
+                          )
+                        ],
+                      );
+                    }
+                    if (index >= provider.incompleteTasks.length && provider.completedTasks.isNotEmpty) {
+                      return TaskTile(
+                        index: index,
+                        task: provider.completedTasks[index - provider.incompleteTasks.length]
+                      );
+                    } else {
+                      return TaskTile(index: index, task: provider.incompleteTasks[index]);
+                    }
+                  }
                 }
               ),
             ),
