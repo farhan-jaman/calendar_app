@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:calendar_app/models/event.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HolidayService {
-  static const String _calendarId = 'en.bd%23holiday@group.v.calendar.google.com';
+  static String get _calendarId => getCalendarIdFromLocale();
   static const String _apiKey = 'Your_API_KEY';
 
   static Future<List<Event>> loadHolidays(int year) async {
@@ -17,6 +18,13 @@ class HolidayService {
     }
     prefs.remove('cached_holidays_${year - 1}');
 
+    final fallbackUrl =
+        'https://www.googleapis.com/calendar/v3/calendars/en.us%23holiday@group.v.calendar.google.com/events'
+        '?key=$_apiKey'
+        '&timeMin=$year-01-01T00:00:00Z'
+        '&timeMax=$year-12-31T23:59:59Z'
+        '&singleEvents=true'
+        '&orderBy=startTime';
     final url =
         'https://www.googleapis.com/calendar/v3/calendars/$_calendarId/events'
         '?key=$_apiKey'
@@ -25,13 +33,20 @@ class HolidayService {
         '&singleEvents=true'
         '&orderBy=startTime';
     
-    final response = await http.get(Uri.parse(url));
+    http.Response response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       await prefs.setString(cacheKey, response.body);
       return _parseHolidayJson(jsonDecode(response.body));
     } else {
-      throw Exception('Failed to fetch holidays for $year');
+      response = await http.get(Uri.parse(fallbackUrl));
+
+      if (response.statusCode == 200) {
+        await prefs.setString(cacheKey, response.body);
+        return _parseHolidayJson(jsonDecode(response.body));
+      } else {
+        throw Exception('Failed to fetch holidays for $year');
+      }
     }
   }
 
@@ -54,5 +69,12 @@ class HolidayService {
     }
 
     return holidays;
+  }
+
+  static String getCalendarIdFromLocale() {
+    final country = PlatformDispatcher.instance.locale.countryCode?.toLowerCase() ?? 'us';
+    final language = PlatformDispatcher.instance.locale.languageCode.toLowerCase();
+
+    return '$language.$country%23holiday@group.v.calendar.google.com';
   }
 }
