@@ -30,12 +30,14 @@ class TaskTab extends StatelessWidget {
                   Row(
                     children: [
                       IconButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ConfirmDeleteDialog(),
-                          );
-                        },
+                        onPressed: context.watch<TaskProvider>().taskList.isNotEmpty
+                          ? () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => ConfirmDeleteDialog(),
+                            );
+                          }
+                          : null,
                         icon: Icon(Icons.delete),
                       ),
                       SizedBox(width: 12),

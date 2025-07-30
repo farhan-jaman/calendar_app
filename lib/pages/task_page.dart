@@ -91,7 +91,13 @@ class _TaskPageState extends State<TaskPage> {
                 if (_focusNodes.isNotEmpty) _focusNodes[0].requestFocus();
               }
             },
-            child: Center(child: Text('Tap to add a task')),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.transparent,
+              alignment: Alignment.center,
+              child: Text('Tap to add a task')
+            ),
           )
           : ListView.builder(
             itemCount: _taskList.length,

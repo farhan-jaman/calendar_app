@@ -27,7 +27,14 @@ class CalendarWidget extends StatelessWidget {
           context.read<CalendarProvider>().changeFocusedDay(focusedDay);
           context.read<CalendarProvider>().changeSelectedDay(selectedDay);
         },
-        onPageChanged: (focusedDay) => context.read<CalendarProvider>().changeFocusedDay(focusedDay),
+        onPageChanged: (focusedDay) {
+          context.read<CalendarProvider>().changeFocusedDay(focusedDay);
+          context.read<CalendarProvider>().changeSelectedDay(DateTime(
+            focusedDay.year,
+            focusedDay.month,
+            context.read<CalendarProvider>().selectedDay.day
+          ));
+        },
         calendarBuilders: CalendarBuilders(
           markerBuilder: (context, day, events) {
             final holidays = context.watch<EventProvider>().holidayList;
