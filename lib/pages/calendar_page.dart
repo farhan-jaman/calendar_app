@@ -17,6 +17,7 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> with TickerProviderStateMixin {
 
   late TabController _tabController;
+  int? _lastNotifiedIndex;
 
   @override
   void initState() {
@@ -28,8 +29,14 @@ class _CalendarPageState extends State<CalendarPage> with TickerProviderStateMix
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _tabController.addListener(() {
-      if (!_tabController.indexIsChanging && mounted) context.read<DataProvider>().changeTabIndex(_tabController.index);
+    _tabController.animation?.addListener(() {
+      final double animationValue = _tabController.animation!.value;
+      final int targetIndex = animationValue.round();
+
+      if ((animationValue - targetIndex).abs() < 0.5 && _lastNotifiedIndex != targetIndex && mounted) {
+        _lastNotifiedIndex = targetIndex;
+        context.read<DataProvider>().changeTabIndex(targetIndex);
+      }
     });
   }
 
